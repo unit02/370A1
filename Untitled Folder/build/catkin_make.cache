@@ -1,0 +1,2 @@
+robotsim
+-DCATKIN_DEVEL_PREFIX=/home/eliza/threeohsix/devel -DCMAKE_INSTALL_PREFIX=/home/eliza/threeohsix/install -G Unix Makefiles

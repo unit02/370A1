@@ -1,0 +1,11 @@
+<launch>
+
+  <group ns="robot_0">
+    <node pkg="robotsim" name="pubnode" type="talker.py"/>
+  </group>
+
+  <group ns="robot_1">
+    <node pkg="robotsim" name="pubnode" type="talker,py"/>
+  </group>
+
+</launch>

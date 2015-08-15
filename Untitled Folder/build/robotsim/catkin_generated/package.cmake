@@ -1,0 +1,7 @@
+set(_CATKIN_CURRENT_PACKAGE "robotsim")
+set(robotsim_MAINTAINER "eliza <eliza@todo.todo>")
+set(robotsim_DEPRECATED "")
+set(robotsim_VERSION "0.0.0")
+set(robotsim_BUILD_DEPENDS "roscpp" "rospy" "std_msgs")
+set(robotsim_RUN_DEPENDS "roscpp" "rospy" "std_msgs")
+set(robotsim_BUILDTOOL_DEPENDS "catkin")

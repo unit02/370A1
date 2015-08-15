@@ -1,0 +1,46 @@
+include "instances.inc" 
+
+# simulation property milliseconds per update step 
+interval_sim 100 
+
+
+define myLaser ranger 
+( 
+  sensor( range [ 0 20 ] fov 180.0 samples 180 ) 
+  size [0.1 0.1 0.1] 
+  color "black" 
+  block( 
+	points 4 
+	point[0] [0 0] 
+	point[1] [0.1 0] 
+	point[2] [0.1 0.1] 
+	point[3] [0 0.1] 
+	z [0 0.1] 
+	) 
+) 
+
+
+
+
+# define newentity 
+define myRobot position 
+( 
+  #properties as name value pairs
+  myLaser(pose [ 0.6 0 -0.2 0 ]) 
+  size [3 3 0.25] 
+  drive "diff" 
+
+  block( 
+	points 4  
+	point[0] [0 0] 
+	point[1] [1 0] 
+	point[2] [1 1] 
+	point[3] [0 1] 
+	z [0 .5] 
+  )
+
+) 
+
+# throw in a robot 
+myRobot( pose [ -8 8 0 0 ] name "bob" color "pink") 
+myRobot( pose [ -8 5 0 0 ] name "lucy" color "cyan")

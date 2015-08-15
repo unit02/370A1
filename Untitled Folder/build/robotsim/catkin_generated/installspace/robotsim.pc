@@ -1,0 +1,8 @@
+prefix=/home/eliza/threeohsix/install
+
+Name: robotsim
+Description: Description of robotsim
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/eliza/threeohsix/install/lib 
+Requires: 
