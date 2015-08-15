@@ -70,7 +70,7 @@ class Dispatcher():
         self.processList.append(process)
         process.event.set()
 
-        if len(self.processList) > 2:
+        if len(self.processList) >= 2:
             for x in range(len(self.processList) - 2):
              self.processList[x].event.clear()
         else:
@@ -108,11 +108,7 @@ class Dispatcher():
         """
         # ...
         #chekc if the top of the stack, else move to the top of the stack
-
-        if (len(self.processList) >= 2) & (process.id != self.processList[self.topOfStack-1].id) :
-            temp = self.processList[self.topOfStack - 1]
-            self.io_sys.move_process(process,self.topOfStack-1)
-            self.io_sys.move_process(temp,self.topOfStack -2)
+        self.to_top(process)
 
         self.io_sys.remove_window_from_process(process)
         self.processList.remove(process)

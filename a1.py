@@ -10,6 +10,7 @@ import curses
 import curses.panel
 import re
 from time import sleep
+from process import State
 
 def menu(menu_string):
     """Present menu information, receive key from user and process.
@@ -84,11 +85,18 @@ def kill():
     """Kill the process at the top of the stack."""
     process = get_process_from_user("Enter the number of the process to kill:")
     # ...
-    process.event.clear()
     #move to top
     #remove from processlist, set dual core going
     #the_dispatcher.proc_finished(process)
-
+    the_dispatcher.to_top(process)
+    process.state = State.killed
+    the_dispatcher.processList.remove(process)
+    the_dispatcher.io_sys.remove_window_from_process(process)
+    the_dispatcher.topOfStack = the_dispatcher.topOfStack-1
+    if(len(the_dispatcher.processList)-1 >= 0):
+         the_dispatcher.processList[len(the_dispatcher.processList)-1].event.set()
+         if (len(the_dispatcher.processList) > 2):
+            the_dispatcher.processList[len(the_dispatcher.processList)-2].event.set()
 
     return False
 
