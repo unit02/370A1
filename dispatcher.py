@@ -61,6 +61,23 @@ class Dispatcher():
         """Move the process to the top of the stack."""
         # ...
 
+        self.io_sys.remove_window_from_process(process)
+        self.processList.remove(process)
+        for x in range (len(self.processList)):
+            self.io_sys.move_process(self.processList[x],x)
+
+        process.iosys.allocate_window_to_process(process, len(self.processList))
+        self.processList.append(process)
+        process.event.set()
+
+        if len(self.processList) > 2:
+            for x in range(len(self.processList) - 2):
+             self.processList[x].event.clear()
+        else:
+            for x in range(len(self.processList) - 1):
+             self.processList[x].event.clear()
+
+
 
     def pause_system(self):
         """Pause the currently running process.
