@@ -50,7 +50,7 @@ class Dispatcher():
     def dispatch_next_process(self):
         """Dispatch the process at the top of the stack."""
         # ...
-        nextProc =  self.processList[self.topOfStack]
+        nextProc = self.processList[self.topOfStack]
         nextProc.event.set()
         nextProc.start()
 
@@ -82,7 +82,6 @@ class Dispatcher():
         else:
             for x in range(len(self.processList) - 1):
              self.processList[x].event.clear()
-
 
 
     def pause_system(self):
@@ -133,8 +132,11 @@ class Dispatcher():
     def proc_waiting(self, process):
         """Receive notification that process is waiting for input."""
         # ...
+
+        process.state = State.waiting
+        self.processList.remove(process)
         self.waitingList.append(process)
-        
+        self.io_sys.move_process(process,len(self.waitingList)-1)
         process.event.clear()
         process.event.wait()
 
@@ -142,8 +144,15 @@ class Dispatcher():
     def process_with_id(self, id):
         """Return the process with the id."""
         # ...
+        retProcess = None
         for i in range(len(self.processList)):
           if(id == self.processList[i].id):
                 retProcess = self.processList[i]
+
+        if retProcess is None:
+            for x in range(len(self.waitingList)):
+                if(id == self.waitingList[x].id):
+                    retProcess = self.waitingList[x]
+
         return retProcess
 

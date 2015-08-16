@@ -72,6 +72,9 @@ def focus():
     # put the data in the buffer of the process and wake it up
     # ...
     the_dispatcher.io_sys.process_buffers[process] = input
+    process.state = State.runnable
+    the_dispatcher.processList.append(process)
+    the_dispatcher.to_top(process)
     process.event.set()
 
     return False
