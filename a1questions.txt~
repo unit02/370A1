@@ -4,6 +4,8 @@
 
 3. (For SOFTENG370 students only). Does the solution of maintaining one stack shared by multiple processors scale well? Explain.
 
-Maintaining one stack for multiple processors does not scale well due to issues with synchronization. Examples of these issues were presented in the lectures, with lock distribution during critical sections being the cause of great strife. A solution presented was that of spin-locks / busy waits. The use of this solution presents a major issue - if two processors access the stack at the same time, they would both see that is is unlocked, and concurrently gain the write lock, leading to a possible loss  or corruption of data. 
+Maintaining one stack for multiple processors does not scale well due to issues with synchronization. Examples of these issues were presented in the lectures, with lock distribution during critical sections being the cause of great strife. A solution presented was that of spin-locks / busy waits. The use of this solution presents a major issue - if two processors access the stack at the same time, they would both see that is is unlocked, and concurrently gain the write lock, leading to a possible loss or corruption of data. 
+
+Another solution presented was that of adding priorities to tasks, then using those priorities to gain the lock. This used in conjunction with a single stack accessed concurrently by multiple processors is unlikely to scale well, due to the issue of certain low-priority tasks never being executed, especially when there are multiple processors. Synchoronizing the priorities over the processors is also an issue.
 
 A solution to this would be to have a stack per processor, then after each processor has completed its own actions, the stacks are merged. This however solution is rather resource heavy, and not very realistic. 
