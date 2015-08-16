@@ -53,6 +53,7 @@ class Process(threading.Thread):
         """Run as an interactive process."""
         # Something like the following but you will have to think about
         # pausing and resuming the process.
+        self.state = State.waiting
         loops = self.ask_user()
         while loops > 0:
              for i in range(loops):
