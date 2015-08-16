@@ -97,7 +97,6 @@ def kill():
     process.state = State.killed
     the_dispatcher.processList.remove(process)
     the_dispatcher.io_sys.remove_window_from_process(process)
-    the_dispatcher.topOfStack = the_dispatcher.topOfStack-1
 
     if(len(the_dispatcher.processList)-1 >= 0):
          the_dispatcher.processList[len(the_dispatcher.processList)-1].event.set()
