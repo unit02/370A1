@@ -93,14 +93,19 @@ def kill():
     #move to top
     #remove from processlist, set dual core going
     #the_dispatcher.proc_finished(process)
-    the_dispatcher.to_top(process)
+    if process.state == State.waiting:
+        the_dispatcher.to_top_interactive(process)
+        the_dispatcher.waitingList.remove(process)
+    else:
+        the_dispatcher.to_top(process)
+        the_dispatcher.processList.remove(process)
+
     process.state = State.killed
-    the_dispatcher.processList.remove(process)
     the_dispatcher.io_sys.remove_window_from_process(process)
 
     if(len(the_dispatcher.processList)-1 >= 0):
          the_dispatcher.processList[len(the_dispatcher.processList)-1].event.set()
-         if (len(the_dispatcher.processList) > 2):
+         if (len(the_dispatcher.processList) >= 2):
             the_dispatcher.processList[len(the_dispatcher.processList)-2].event.set()
 
     return False

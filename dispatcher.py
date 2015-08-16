@@ -35,8 +35,6 @@ class Dispatcher():
 
         process.iosys.allocate_window_to_process(process, len(self.processList)-1 )
 
-
-
         process.event.set()
         process.start()
 
@@ -62,25 +60,6 @@ class Dispatcher():
         else:
             for x in range(len(self.processList) - 1):
              self.processList[x].event.clear()
-
-    def cleanWaiting(self,process):
-        self.io_sys.remove_window_from_process(process)
-        self.waitingList.remove(process)
-        for x in range (len(self.waitingList)):
-            self.io_sys.move_process(self.waitingList[x],x)
-
-        process.iosys.allocate_window_to_process(process, len(self.waitingList))
-        self.waitingList.append(process)
-
-        if len(self.processList) >= 2:
-            for x in range(len(self.processList) - 2):
-             self.processList[x].event.clear()
-        else:
-            for x in range(len(self.processList) - 1):
-             self.processList[x].event.clear()
-
-
-
 
     def to_top(self, process):
         """Move the process to the top of the stack."""
@@ -127,8 +106,6 @@ class Dispatcher():
         while len(self.processList) != 0:
             pass
 
-
-
     def proc_finished(self, process):
         """Receive notification that "proc" has finished.
         Only called from running processes.
@@ -142,10 +119,26 @@ class Dispatcher():
 
         if(len(self.processList)-1 >= 0):
          self.processList[len(self.processList)-1].event.set()
-         if (len(self.processList) > 2):
+         if (len(self.processList) >= 2):
             self.processList[len(self.processList)-2].event.set()
 
+    def to_top_interactive(self, process):
+        """Move the process to the top of the stack."""
+        # ...
 
+        self.io_sys.remove_window_from_process(process)
+        self.waitingList.remove(process)
+        for x in range (len(self.waitingList)):
+            self.io_sys.move_process(self.waitingList[x],x)
+
+        process.iosys.allocate_window_to_process(process, len(self.waitingList))
+        self.waitingList.append(process)
+        process.event.set()
+
+        if(len(self.processList)-1 >= 0):
+         self.processList[len(self.processList)-1].event.set()
+         if (len(self.processList) >= 2):
+            self.processList[len(self.processList)-2].event.set()
 
     def proc_waiting(self, process):
         """Receive notification that process is waiting for input."""
@@ -153,9 +146,17 @@ class Dispatcher():
         process.state = State.waiting
         self.processList.remove(process)
         self.waitingList.append(process)
+
         self.io_sys.move_process(process,len(self.waitingList)-1)
+
         process.event.clear()
         process.event.wait()
+
+        if(len(self.processList)-1 >= 0):
+         self.processList[len(self.processList)-1].event.set()
+         if (len(self.processList) >= 2):
+            self.processList[len(self.processList)-2].event.set()
+
 
 
     def process_with_id(self, id):

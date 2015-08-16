@@ -1,0 +1,9 @@
+1. Look at the list of processes, arrival times and burst times on page 270 of the text. Draw a Gantt chart (ASCII art is suitable) showing the order of execution for these processes if they were scheduled by aLIFO stack-based dispatcher. What would the average waiting time be in this case?
+2. The code commented out in Process.main_process_body method checks the process’ state. A real implementation wouldn’t require this. Explain why a real system doesn’t require this and why a Python thread implementation does. Alternatively explain how you could get rid of this even when using Python threads.
+
+
+3. (For SOFTENG370 students only). Does the solution of maintaining one stack shared by multiple processors scale well? Explain.
+
+Maintaining one stack for multiple processors does not scale well due to issues with synchronization. Examples of these issues were presented in the lectures, with lock distribution during critical sections being the cause of great strife. A solution presented was that of spin-locks / busy waits. The use of this solution presents a major issue - if two processors access the stack at the same time, they would both see that is is unlocked, and concurrently gain the write lock, leading to a possible loss  or corruption of data. 
+
+A solution to this would be to have a stack per processor, then after each processor has completed its own actions, the stacks are merged. This however solution is rather resource heavy, and not very realistic. 
