@@ -71,6 +71,8 @@ def focus():
     # only get here after the user has pressed return
     # put the data in the buffer of the process and wake it up
     # ...
+    the_dispatcher.io_sys.process_buffers[process] = input
+    process.event.set()
 
     return False
 
@@ -93,6 +95,7 @@ def kill():
     the_dispatcher.processList.remove(process)
     the_dispatcher.io_sys.remove_window_from_process(process)
     the_dispatcher.topOfStack = the_dispatcher.topOfStack-1
+
     if(len(the_dispatcher.processList)-1 >= 0):
          the_dispatcher.processList[len(the_dispatcher.processList)-1].event.set()
          if (len(the_dispatcher.processList) > 2):

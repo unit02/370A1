@@ -6,6 +6,7 @@
 
 from threading import Lock, Event
 from process import State
+from process import Type
 import threading
 
 class Dispatcher():
@@ -16,6 +17,7 @@ class Dispatcher():
     def __init__(self):
         """Construct the dispatcher."""
         self.processList = []
+        self.waitingList = []
         self.topOfStack = 0
 
     def set_io_sys(self, io_sys):
@@ -24,8 +26,13 @@ class Dispatcher():
 
     def add_process(self, process):
         """Add and start the process."""
-        # ...
+        # ... check if interactive
         process.state = State.runnable
+
+        if process.type == Type.interactive:
+            process.state = State.waiting
+            self.waitingList.append(process)
+
         process.iosys.allocate_window_to_process(process, self.topOfStack)
         self.processList.append(process)
         self.topOfStack =  self.topOfStack + 1
@@ -100,6 +107,9 @@ class Dispatcher():
     def wait_until_finished(self):
         """Hang around until all runnable processes are finished."""
         # ...
+        while len(self.processList) != 0:
+            pass
+
 
 
     def proc_finished(self, process):
@@ -124,6 +134,9 @@ class Dispatcher():
     def proc_waiting(self, process):
         """Receive notification that process is waiting for input."""
         # ...
+        process.event.clear()
+        process.event.wait()
+
 
     def process_with_id(self, id):
         """Return the process with the id."""
