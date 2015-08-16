@@ -28,12 +28,7 @@ class Dispatcher():
         """Add and start the process."""
         # ... check if interactive
         process.state = State.runnable
-
-        if process.type == Type.interactive:
-            process.state = State.waiting
-            self.waitingList.append(process)
-
-        process.iosys.allocate_window_to_process(process, self.topOfStack)
+        self.io_sys.allocate_window_to_process(process, self.topOfStack)
         self.processList.append(process)
         self.topOfStack =  self.topOfStack + 1
         process.event.set()
@@ -134,6 +129,16 @@ class Dispatcher():
     def proc_waiting(self, process):
         """Receive notification that process is waiting for input."""
         # ...
+        process.state = State.waiting
+        self.processList.remove(process)
+        self.waitingList.append(process)
+        self.io_sys.move_process(process,len(self.waitingList)-1)
+
+        if(len(self.processList)-1 >= 0):
+         self.processList[len(self.processList)-1].event.set()
+         if (len(self.processList) > 2):
+            self.processList[len(self.processList)-2].event.set()
+
         process.event.clear()
         process.event.wait()
 
